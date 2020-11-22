@@ -1146,18 +1146,18 @@ button:focus {
 @media only screen and (max-width: 991px) {
   .nav__item {
     margin-bottom: 0;
-    width: calc(20% - 1rem);
+    width: calc(50% - 1rem);
   }
 }
 @media only screen and (max-width: 768px) {
   .nav__item {
-    width: calc(20% - .5rem);
+    width: calc(50% - .5rem);
   }
 }
 @media only screen and (max-width: 580px) {
   .nav__item {
     height: auto;
-    width: calc(20% - 0rem);
+    width: calc(50% - 0rem);
   }
 }
 .nav__item a {
