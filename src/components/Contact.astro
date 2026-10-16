@@ -81,9 +81,9 @@ import { education, profile } from '../data/profile';
   <div class="wrap flex flex-wrap items-center justify-between gap-3 py-8 font-mono text-xs text-ink-3">
     <span>© {new Date().getFullYear()} {profile.name}</span>
     <span>
-      built with <a class="text-ink-2 hover:text-accent" href="https://astro.build" target="_blank" rel="noopener">Astro</a>
+      built with <a class="text-ink-2 underline decoration-line-2 underline-offset-3 hover:text-accent hover:decoration-accent" href="https://astro.build" target="_blank" rel="noopener">Astro</a>
       · stats refreshed daily ·
-      <a class="text-ink-2 hover:text-accent" href={`${profile.links.github}/${profile.handle}.github.io`} target="_blank" rel="noopener"
+      <a class="text-ink-2 underline decoration-line-2 underline-offset-3 hover:text-accent hover:decoration-accent" href={`${profile.links.github}/${profile.handle}.github.io`} target="_blank" rel="noopener"
         >source</a
       >
     </span>
