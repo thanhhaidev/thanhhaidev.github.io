@@ -64,15 +64,12 @@ const jsonLd = {
       >Skip to content</a
     >
 
-    <!-- Backdrop: dotted grid fading out, plus two soft glows. -->
-    <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[900px] overflow-hidden">
+    <!-- Backdrop: grid fading out, plus two soft glows. Gradients only — no filter: blur(),
+         which is very expensive to composite on iOS Safari while scrolling. -->
+    <div aria-hidden="true" class="backdrop pointer-events-none absolute inset-x-0 top-0 -z-10 h-[900px] overflow-hidden">
       <div
         class="absolute inset-0 bg-[linear-gradient(to_right,var(--c-grid)_1px,transparent_1px),linear-gradient(to_bottom,var(--c-grid)_1px,transparent_1px)] mask-[radial-gradient(ellipse_70%_60%_at_50%_0%,#000_40%,transparent_100%)] bg-size-[56px_56px]"
       >
-      </div>
-      <div class="absolute -top-40 left-1/2 h-[480px] w-[720px] -translate-x-[70%] rounded-full bg-accent/20 blur-[120px] light:bg-accent/10">
-      </div>
-      <div class="absolute -top-24 left-1/2 h-[380px] w-[560px] translate-x-[5%] rounded-full bg-accent-2/15 blur-[120px] light:bg-accent-2/10">
       </div>
     </div>
 
@@ -91,13 +88,16 @@ const jsonLd = {
       );
       document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
 
-      document.querySelectorAll<HTMLElement>('.spot').forEach((el) => {
-        el.addEventListener('pointermove', (e) => {
-          const r = el.getBoundingClientRect();
-          el.style.setProperty('--mx', `${e.clientX - r.left}px`);
-          el.style.setProperty('--my', `${e.clientY - r.top}px`);
+      // Cursor spotlight only for real pointers; on touch, pointermove fires while scrolling.
+      if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        document.querySelectorAll<HTMLElement>('.spot').forEach((el) => {
+          el.addEventListener('pointermove', (e) => {
+            const r = el.getBoundingClientRect();
+            el.style.setProperty('--mx', `${e.clientX - r.left}px`);
+            el.style.setProperty('--my', `${e.clientY - r.top}px`);
+          });
         });
-      });
+      }
     </script>
   </body>
 </html>

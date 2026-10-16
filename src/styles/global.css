@@ -111,7 +111,24 @@
   @apply bg-linear-to-r from-accent to-accent-2 bg-clip-text text-transparent;
 }
 
+/* Two soft glows behind the hero, drawn as gradients (cheap) rather than blurred blobs. */
+.backdrop {
+  background:
+    radial-gradient(640px 420px at 28% -8%, color-mix(in srgb, var(--c-accent) 20%, transparent), transparent 70%),
+    radial-gradient(520px 380px at 72% -4%, color-mix(in srgb, var(--c-accent-2) 15%, transparent), transparent 70%);
+}
+:root[data-theme="light"] .backdrop {
+  background:
+    radial-gradient(640px 420px at 28% -8%, color-mix(in srgb, var(--c-accent) 10%, transparent), transparent 70%),
+    radial-gradient(520px 380px at 72% -4%, color-mix(in srgb, var(--c-accent-2) 8%, transparent), transparent 70%);
+}
+
 /* Cursor-following highlight on cards; --mx/--my are set by a script in Base.astro. */
+@media not ((hover: hover) and (pointer: fine)) {
+  .spot::before {
+    display: none;
+  }
+}
 .spot::before {
   content: "";
   position: absolute;
