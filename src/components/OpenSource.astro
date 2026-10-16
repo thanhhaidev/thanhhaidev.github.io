@@ -1,0 +1,208 @@
+---
+import { getCollection, getEntries } from 'astro:content';
+import Contributions from './Contributions.astro';
+import Icon from './Icon.astro';
+import InlineCode from './InlineCode.astro';
+import SectionHead from './SectionHead.astro';
+import { formatNumber, getContributions, getLanguages, getPubStats } from '../lib/remote';
+import { profile } from '../data/profile';
+
+const withStats = async <T extends { id: string }>(entries: T[]) =>
+  Promise.all(entries.map(async (entry) => ({ ...entry, stats: await getPubStats(entry.id) })));
+
+const allPackages = await withStats(
+  (await getCollection('packages')).sort((a, b) => a.data.order - b.data.order),
+);
+
+const featured = (await getCollection('projects', (p) => p.data.featured))[0];
+const featuredIds = new Set(featured?.data.packages.map((ref) => ref.id) ?? []);
+const subPackages = featured ? (await getEntries(featured.data.packages)).map((p) => allPackages.find((a) => a.id === p.id)!) : [];
+const packages = allPackages.filter((p) => !featuredIds.has(p.id));
+
+const [languages, contributions] = await Promise.all([
+  featured ? getLanguages(`${profile.handle}/${featured.id}`) : undefined,
+  getContributions(profile.handle),
+]);
+
+// Totals only appear when every package answered, so a flaky build never under-reports.
+const complete = allPackages.every((p) => p.stats);
+const sum = (key: 'downloads' | 'points' | 'likes') => allPackages.reduce((t, p) => t + (p.stats?.[key] ?? 0), 0);
+const tiles = [
+  { icon: 'package', value: String(allPackages.length), label: 'packages on pub.dev' },
+  complete && { icon: 'download', value: formatNumber(sum('downloads')), label: 'downloads / 30 days' },
+  complete && { icon: 'gauge', value: formatNumber(sum('points')), label: 'pub points' },
+  complete && { icon: 'heart', value: formatNumber(sum('likes')), label: 'likes on pub.dev' },
+].filter(Boolean) as { icon: 'package' | 'download' | 'gauge' | 'heart'; value: string; label: string }[];
+
+const languageColor: Record<string, string> = {
+  Dart: 'bg-lang-dart',
+  Swift: 'bg-lang-swift',
+  Kotlin: 'bg-lang-kotlin',
+};
+const colorOf = (name: string) => languageColor[name] ?? 'bg-ink-3/40';
+---
+
+<section id="work" class="py-20 md:py-28">
+  <div class="wrap">
+    <SectionHead
+      index="01"
+      eyebrow="open source"
+      title="Things I build and maintain"
+      description="Flutter plugins and Dart tooling published on pub.dev. Numbers are pulled from pub.dev and GitHub on every build."
+    >
+      <a
+        class="inline-flex items-center gap-1.5 font-mono text-[13px] text-ink-2 no-underline hover:text-accent"
+        href={`${profile.links.github}?tab=repositories`}
+        target="_blank"
+        rel="noopener"
+      >
+        all repositories <Icon name="arrow" class="size-3.5" />
+      </a>
+    </SectionHead>
+
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        featured && (
+          <article class="card spot reveal flex flex-col p-6 sm:col-span-2 lg:row-span-2 md:p-7">
+            <div class="mb-5 flex flex-wrap items-center gap-1.5">
+              <span class="chip border-accent/30 bg-accent/10 text-accent">★ featured</span>
+              {featured.data.tags.map((tag) => <span class="chip">{tag}</span>)}
+            </div>
+            <h3 class="mb-3 text-2xl font-semibold tracking-[-0.02em]">{featured.data.title}</h3>
+            <p class="mb-6 text-[15px] leading-relaxed text-ink-2">{featured.data.description}</p>
+
+            {languages && (
+              <div class="mb-6">
+                <div
+                  class="mb-2.5 flex h-1.5 gap-0.5 overflow-hidden rounded-full"
+                  role="img"
+                  aria-label={languages.map((l) => `${l.name} ${l.percent}%`).join(', ')}
+                >
+                  {languages.map((l) => (
+                    <i class:list={['block h-full', colorOf(l.name)]} style={{ width: `${l.percent}%` }} />
+                  ))}
+                </div>
+                <ul class="flex flex-wrap gap-x-4 gap-y-1 font-mono text-xs text-ink-2">
+                  {languages.map((l) => (
+                    <li class="inline-flex items-center gap-1.5">
+                      <i class:list={['inline-block size-2 rounded-full', colorOf(l.name)]} />
+                      {l.name} <span class="text-ink-3">{l.percent}%</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <ul class="mb-6 divide-y divide-line overflow-hidden rounded-xl border border-line bg-bg/40">
+              {subPackages.map((pkg) => (
+                <li class="flex items-baseline justify-between gap-3 px-4 py-2.5">
+                  <a
+                    class="font-mono text-[13px] break-all text-ink no-underline hover:text-accent"
+                    href={`https://pub.dev/packages/${pkg.id}`}
+                    target="_blank"
+                    rel="noopener"
+                    title={pkg.data.description}
+                  >
+                    {pkg.id}
+                  </a>
+                  {pkg.stats && <span class="shrink-0 font-mono text-xs text-ink-3">v{pkg.stats.version}</span>}
+                </li>
+              ))}
+            </ul>
+
+            <div class="mt-auto flex flex-wrap gap-2">
+              {featured.data.docs && (
+                <a
+                  class="inline-flex items-center gap-1.5 rounded-lg bg-ink px-3.5 py-2 text-[13px] font-medium text-bg no-underline hover:opacity-90"
+                  href={featured.data.docs}
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Documentation <Icon name="arrow" class="size-3.5" />
+                </a>
+              )}
+              <a
+                class="inline-flex items-center gap-1.5 rounded-lg border border-line px-3.5 py-2 text-[13px] font-medium text-ink no-underline hover:border-line-2"
+                href={`${profile.links.github}/${featured.id}`}
+                target="_blank"
+                rel="noopener"
+              >
+                <Icon name="github" class="size-3.5" /> Source
+              </a>
+            </div>
+          </article>
+        )
+      }
+
+      {
+        tiles.map((tile) => (
+          <div class="card spot reveal flex min-h-36 flex-col justify-between p-5">
+            <span class="grid size-9 place-items-center rounded-lg border border-line bg-surface-2 text-accent">
+              <Icon name={tile.icon} />
+            </span>
+            <div>
+              <div class="text-4xl font-semibold tracking-[-0.03em] tabular-nums">{tile.value}</div>
+              <div class="mt-1 font-mono text-xs text-ink-3">{tile.label}</div>
+            </div>
+          </div>
+        ))
+      }
+
+      {contributions && <Contributions {...contributions} />}
+    </div>
+
+    <p class="reveal mt-12 mb-4 font-mono text-[13px] text-ink-3">
+      <span class="text-accent">$</span> ls ~/pub.dev/packages
+    </p>
+    <div class="grid gap-4 md:grid-cols-2">
+      {
+        packages.map((pkg) => (
+          <article class="card spot reveal flex flex-col gap-3 p-5 transition-colors hover:border-line-2">
+            <div class="flex items-start justify-between gap-3">
+              <h3 class="font-mono text-[15px] font-medium break-all">
+                <a
+                  href={`https://pub.dev/packages/${pkg.id}`}
+                  target="_blank"
+                  rel="noopener"
+                  class="no-underline after:absolute after:inset-0 after:rounded-2xl"
+                >
+                  {pkg.id}
+                </a>
+              </h3>
+              {pkg.stats && <span class="chip shrink-0">v{pkg.stats.version}</span>}
+            </div>
+            <p class="flex-1 text-sm leading-relaxed text-ink-2">
+              <InlineCode text={pkg.data.description} />
+            </p>
+            <div class="flex flex-wrap items-center justify-between gap-3 border-t border-line pt-3">
+              {pkg.stats && (
+                <div class="flex flex-wrap gap-x-4 gap-y-1 font-mono text-xs text-ink-3">
+                  <span class="inline-flex items-center gap-1" title="likes">
+                    <Icon name="heart" class="size-3.5" />
+                    <b class="font-medium text-ink-2">{formatNumber(pkg.stats.likes)}</b>
+                  </span>
+                  <span class="inline-flex items-center gap-1" title="pub points">
+                    <Icon name="gauge" class="size-3.5" />
+                    <b class="font-medium text-ink-2">{pkg.stats.points}</b>/160
+                  </span>
+                  <span class="inline-flex items-center gap-1" title="downloads, last 30 days">
+                    <Icon name="download" class="size-3.5" />
+                    <b class="font-medium text-ink-2">{formatNumber(pkg.stats.downloads)}</b>
+                  </span>
+                </div>
+              )}
+              <a
+                class="relative z-10 inline-flex items-center gap-1 font-mono text-xs text-ink-3 no-underline hover:text-accent"
+                href={pkg.data.docs ?? `https://github.com/${pkg.data.repo}`}
+                target="_blank"
+                rel="noopener"
+              >
+                {pkg.data.docs ? 'docs' : 'source'} <Icon name="arrow" class="size-3" />
+              </a>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

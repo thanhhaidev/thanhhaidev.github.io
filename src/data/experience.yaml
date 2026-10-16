@@ -1,0 +1,51 @@
+# Work history, shown newest first (lowest `order` first).
+
+- id: ascendx
+  order: 1
+  company: AscendX
+  role: Mobile Engineer
+  period: 04/2026 — Present
+  current: true
+  highlights:
+    - text: Building native SDKs for iOS and Android, and the cross-platform layers that expose them to app developers.
+  tags: [Swift, Kotlin, iOS, Android, Flutter, Dart]
+
+- id: designveloper
+  order: 2
+  company: Designveloper
+  role: Fullstack Developer
+  period: 10/2020 — 10/2025
+  highlights:
+    - link: { label: Lodg, url: https://lodg.co.nz/ }
+      text: tax and accounting platform for New Zealand sole traders, small companies and property investors — open-banking bank feeds, invoicing, automatic tax calculation and filing with IRD. Worked across the full stack.
+    - link: { label: Chloe Ting, url: https://chloeting.com/ }
+      text: home-workout fitness platform with free training programs, schedules and healthy recipes. Built the website and the iOS & Android app end to end.
+    - link: { label: Ordoclic, url: https://www.ordoclic.fr }
+      text: e-health platform built by doctors for healthcare professionals and patients; the first paperless medical prescription solution in France.
+  tags: [Angular, React, Redux, RxJS]
+
+- id: ant-tech
+  order: 3
+  company: Ant-Tech
+  role: Fullstack Developer
+  period: 08/2020 — 10/2020
+  highlights:
+    - link: { label: Polymate, url: https://www.polymate.fr/ }
+      text: a social network whose news feed is written by its users and changes in real time with the phone's location.
+    - link: { label: Youggy, url: https://www.youggy.com/ }
+      text: a platform matching volunteers with associations by location, availability and skills during the COVID-19 crisis in France.
+  tags: [NestJS, MongoDB, Docker, AWS S3/EC2, Nginx, Angular, OneSignal]
+
+- id: ooc
+  order: 4
+  company: OOC JSC
+  role: Frontend Developer
+  period: 03/2019 — 07/2020
+  highlights:
+    - link: { label: digiiKPI, url: https://ooc.vn/phan-mem-quan-ly-kpi }
+      text: performance assessment with the BSC–KPI method — goal setting, tracking and reporting.
+    - link: { label: digiiHRI, url: https://ooc.vn/phan-mem-thong-tin-nhan-su }
+      text: HR information system for personnel profiles, reporting and policy tracking.
+    - link: { label: digiiCB, url: https://ooc.vn/phan-mem-quan-ly-dai-ngo }
+      text: compensation management and payroll aligned with company strategy.
+  tags: [Angular, Kendo UI]

@@ -1,0 +1,15 @@
+# GitHub repositories. The id must be the repository name under github.com/thanhhaidev.
+# The entry with `featured: true` is shown as the large card in the open source section.
+
+- id: prebid-mobile-flutter
+  title: Prebid Mobile Flutter
+  featured: true
+  tags: [Flutter plugin, Ad tech, Melos monorepo]
+  docs: https://thanhhaidev.github.io/prebid-mobile-flutter/
+  packages: [prebid_mobile_sdk, prebid_mobile_sdk_gam, prebid_mobile_sdk_admob, prebid_mobile_sdk_max]
+  description: >-
+    An unofficial Flutter wrapper around the Prebid Mobile SDKs for header bidding on Android
+    and iOS. Covers Prebid rendering and the Original API, with optional companions for
+    Google Ad Manager, AdMob and AppLovin MAX — banner, interstitial, rewarded, native and
+    video ads. Ships with a Docusaurus documentation site and a demo app.
+

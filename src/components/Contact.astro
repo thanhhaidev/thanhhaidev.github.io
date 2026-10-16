@@ -1,0 +1,108 @@
+---
+import Icon from './Icon.astro';
+import SectionHead from './SectionHead.astro';
+import { education, profile } from '../data/profile';
+---
+
+<section id="contact" class="pb-20 md:pb-28">
+  <div class="wrap">
+    <SectionHead index="04" eyebrow="contact" title="Let's build something" />
+    <div class="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
+      <div class="card spot reveal p-6 md:p-8">
+        <div
+          aria-hidden="true"
+          class="pointer-events-none absolute -top-24 -right-24 size-72 rounded-full bg-accent/15 blur-3xl"
+        >
+        </div>
+        <div class="relative">
+          <p class="mb-6 max-w-md text-[17px] leading-relaxed text-ink-2">
+            Open to conversations about Flutter, mobile SDK integrations and open-source collaboration. The fastest way to
+            reach me is email.
+          </p>
+          <div class="mb-6 rounded-xl border border-line bg-bg/60 p-4 font-mono text-[13px] leading-7">
+            <div><span class="text-accent">$</span> <span class="text-ink-2">echo</span> $EMAIL</div>
+            <div class="break-all text-ink">{profile.email}</div>
+          </div>
+          <div class="flex flex-wrap gap-2.5">
+            <a
+              href={`mailto:${profile.email}`}
+              class="inline-flex items-center gap-2 rounded-lg bg-ink px-4 py-2.5 text-sm font-medium text-bg no-underline hover:opacity-90"
+            >
+              <Icon name="mail" /> Send an email
+            </a>
+            <button
+              id="copy-email"
+              type="button"
+              data-email={profile.email}
+              class="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-line bg-surface px-4 py-2.5 text-sm font-medium text-ink hover:border-line-2"
+            >
+              <Icon name="copy" class="size-4 [.copied_&]:hidden" />
+              <Icon name="check" class="hidden size-4 text-live [.copied_&]:block" />
+              <span>Copy</span>
+            </button>
+            <a
+              href={profile.links.linkedin}
+              target="_blank"
+              rel="noopener"
+              class="inline-flex items-center gap-2 rounded-lg border border-line bg-surface px-4 py-2.5 text-sm font-medium text-ink no-underline hover:border-line-2"
+            >
+              <Icon name="linkedin" /> LinkedIn
+            </a>
+            <a
+              href="/cv"
+              class="inline-flex items-center gap-2 rounded-lg border border-line bg-surface px-4 py-2.5 text-sm font-medium text-ink no-underline hover:border-line-2"
+            >
+              <Icon name="download" /> CV
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card spot reveal p-6 md:p-8">
+        <p class="mb-4 font-mono text-xs text-ink-3">education · {education.period}</p>
+        <h3 class="text-lg font-semibold">{education.school}</h3>
+        <p class="mt-1 text-sm text-ink-2">{education.degree}</p>
+        <p class="mt-1 font-mono text-xs text-accent">GPA {education.gpa}</p>
+        <ul class="mt-5 space-y-2 text-sm leading-relaxed text-ink-2">
+          {
+            education.highlights.map((h) => (
+              <li class="relative pl-5 before:absolute before:left-0 before:font-mono before:text-ink-3 before:content-['›']">
+                {h}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="border-t border-line">
+  <div class="wrap flex flex-wrap items-center justify-between gap-3 py-8 font-mono text-xs text-ink-3">
+    <span>© {new Date().getFullYear()} {profile.name}</span>
+    <span>
+      built with <a class="text-ink-2 hover:text-accent" href="https://astro.build" target="_blank" rel="noopener">Astro</a>
+      · stats refreshed daily ·
+      <a class="text-ink-2 hover:text-accent" href={`${profile.links.github}/${profile.handle}.github.io`} target="_blank" rel="noopener"
+        >source</a
+      >
+    </span>
+  </div>
+</footer>
+
+<script>
+  const button = document.getElementById('copy-email')!;
+  button.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(button.dataset.email!);
+    } catch {
+      return;
+    }
+    button.classList.add('copied');
+    button.querySelector('span')!.textContent = 'Copied';
+    setTimeout(() => {
+      button.classList.remove('copied');
+      button.querySelector('span')!.textContent = 'Copy';
+    }, 1800);
+  });
+</script>

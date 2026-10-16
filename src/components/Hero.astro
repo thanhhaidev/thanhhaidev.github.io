@@ -1,0 +1,64 @@
+---
+import { Image } from 'astro:assets';
+import CodeWindow from './CodeWindow.astro';
+import Icon from './Icon.astro';
+import avatar from '../assets/avatar.jpg';
+import { profile } from '../data/profile';
+
+const button =
+  'inline-flex items-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium no-underline transition-colors';
+---
+
+<div id="top" class="wrap grid items-center gap-12 pt-12 pb-16 md:pt-20 lg:grid-cols-[1fr_1.05fr] lg:gap-14 lg:pt-24 lg:pb-24">
+  <div>
+    <a
+      href={profile.links.github}
+      target="_blank"
+      rel="noopener"
+      class="mb-7 inline-flex items-center gap-2.5 rounded-full border border-line bg-surface/70 py-1 pr-3.5 pl-1 text-[13px] text-ink-2 no-underline backdrop-blur transition-colors hover:border-line-2"
+    >
+      <Image src={avatar} alt="" width={56} height={56} loading="eager" class="size-6 rounded-full" />
+      <span class="size-1.5 rounded-full bg-live shadow-[0_0_8px_var(--color-live)]" aria-hidden="true"></span>
+      {profile.role} <span class="text-ink-3">@</span>
+      {profile.company}
+    </a>
+
+    <h1 class="mb-5 text-[clamp(44px,8vw,76px)] leading-[0.95] font-bold tracking-[-0.04em]">
+      {profile.name}
+    </h1>
+    <p class="mb-3 font-mono text-sm text-ink-3">
+      <span class="text-accent">$</span> Flutter · Dart · Swift · Kotlin
+    </p>
+    <p class="mb-8 max-w-[520px] text-[17px] leading-relaxed text-ink-2 md:text-lg">
+      I build <span class="text-ink">native SDKs</span> for iOS and Android and the
+      <span class="text-ink">cross-platform</span> layers on top of them. In the open, I publish{' '}
+      <span class="text-gradient font-medium">Flutter &amp; Dart packages</span>: header-bidding ad plugins, icon codegen,
+      localization and date tooling. Before mobile, I shipped web products with Angular, React and Node.js.
+    </p>
+
+    <div class="flex flex-wrap gap-2.5">
+      <a class:list={[button, 'border-ink bg-ink text-bg hover:opacity-90']} href="#work">
+        View my work <span aria-hidden="true">→</span>
+      </a>
+      <a class:list={[button, 'border-line bg-surface/70 text-ink hover:border-line-2']} href="/cv">
+        <Icon name="download" />CV
+      </a>
+      <a class:list={[button, 'border-line bg-surface/70 text-ink hover:border-line-2']} href={profile.links.github} target="_blank" rel="noopener">
+        <Icon name="github" />GitHub
+      </a>
+      <a class:list={[button, 'border-line bg-surface/70 text-ink hover:border-line-2']} href={profile.links.linkedin} target="_blank" rel="noopener">
+        <Icon name="linkedin" />LinkedIn
+      </a>
+      <a class:list={[button, 'border-line bg-surface/70 text-ink hover:border-line-2']} href={profile.links.x} target="_blank" rel="noopener" aria-label="X (Twitter)">
+        <Icon name="x" />
+      </a>
+    </div>
+
+    <p class="mt-8 flex items-center gap-2 font-mono text-xs text-ink-3">
+      <Icon name="pin" class="size-3.5" />
+      {profile.location} · UTC+7
+    </p>
+  </div>
+
+  <CodeWindow />
+</div>

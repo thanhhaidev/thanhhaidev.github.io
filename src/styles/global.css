@@ -1,0 +1,175 @@
+@import "tailwindcss";
+@import "@fontsource-variable/space-grotesk";
+@import "@fontsource-variable/jetbrains-mono";
+
+/* Palette tokens. Dark is the default; the toggle switches to light. */
+:root {
+  --c-bg: #09090b;
+  --c-surface: #0f0f12;
+  --c-surface-2: #17171b;
+  --c-line: #222227;
+  --c-line-2: #33333b;
+  --c-ink: #ededf0;
+  --c-ink-2: #a1a1aa;
+  --c-ink-3: #71717a;
+  --c-accent: #38bdf8;
+  --c-accent-2: #a78bfa;
+  --c-grid: rgb(255 255 255 / 0.045);
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  --c-bg: #fafafa;
+  --c-surface: #ffffff;
+  --c-surface-2: #f4f4f5;
+  --c-line: #e4e4e7;
+  --c-line-2: #d4d4d8;
+  --c-ink: #09090b;
+  --c-ink-2: #52525b;
+  --c-ink-3: #71717a;
+  --c-accent: #0284c7;
+  --c-accent-2: #7c3aed;
+  --c-grid: rgb(0 0 0 / 0.05);
+  color-scheme: light;
+}
+
+@custom-variant light (:root[data-theme="light"] &);
+
+@theme inline {
+  --color-bg: var(--c-bg);
+  --color-surface: var(--c-surface);
+  --color-surface-2: var(--c-surface-2);
+  --color-line: var(--c-line);
+  --color-line-2: var(--c-line-2);
+  --color-ink: var(--c-ink);
+  --color-ink-2: var(--c-ink-2);
+  --color-ink-3: var(--c-ink-3);
+  --color-accent: var(--c-accent);
+  --color-accent-2: var(--c-accent-2);
+
+  --font-sans: "Space Grotesk Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+@theme {
+  --color-live: #22c55e;
+  --color-lang-dart: #00b4ab;
+  --color-lang-swift: #f05138;
+  --color-lang-kotlin: #a97bff;
+  --color-lang-go: #00add8;
+  --color-lang-java: #b07219;
+  --color-lang-ts: #3178c6;
+  --color-lang-js: #f1e05a;
+  --color-lang-cs: #178600;
+
+  --animate-blink: blink 1.1s steps(1) infinite;
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 72px;
+    -webkit-text-size-adjust: 100%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+  body {
+    @apply bg-bg font-sans text-ink antialiased;
+  }
+  ::selection {
+    @apply bg-accent/30 text-ink;
+  }
+  :focus-visible {
+    @apply rounded outline-2 outline-offset-3 outline-accent;
+  }
+  code {
+    @apply font-mono text-[0.9em];
+  }
+}
+
+@utility wrap {
+  @apply mx-auto w-full max-w-[1120px] px-4 md:px-8;
+}
+
+@utility card {
+  @apply relative overflow-hidden rounded-2xl border border-line bg-surface;
+}
+
+@utility chip {
+  @apply inline-flex items-center gap-1.5 rounded-md border border-line bg-surface-2 px-2 py-0.5 font-mono text-xs whitespace-nowrap text-ink-2;
+}
+
+@utility text-gradient {
+  @apply bg-linear-to-r from-accent to-accent-2 bg-clip-text text-transparent;
+}
+
+/* Cursor-following highlight on cards; --mx/--my are set by a script in Base.astro. */
+.spot::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+  background: radial-gradient(
+    420px circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in srgb, var(--c-accent) 9%, transparent),
+    transparent 60%
+  );
+}
+.spot:hover::before {
+  opacity: 1;
+}
+
+/* Shiki emits dark colors inline and the light ones as --shiki-light. */
+.astro-code {
+  background-color: transparent !important;
+}
+:root[data-theme="light"] .astro-code span {
+  color: var(--shiki-light) !important;
+}
+.astro-code code {
+  counter-reset: line;
+}
+.astro-code .line::before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 2ch;
+  margin-right: 1.5ch;
+  text-align: right;
+  color: var(--c-ink-3);
+  opacity: 0.5;
+}
+.typing .line:not(.shown) {
+  display: none;
+}
+
+/* Scroll reveal; the class is only added by JS, so no-JS visitors see everything. */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+}
+.js .reveal.in {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

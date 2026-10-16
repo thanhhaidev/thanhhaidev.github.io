@@ -1,0 +1,13 @@
+---
+// Renders `backticks` in plain data strings as <code>, escaping everything else.
+interface Props {
+  text: string;
+}
+
+const escape = (s: string) =>
+  s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+
+const html = escape(Astro.props.text).replace(/`([^`]+)`/g, '<code>$1</code>');
+---
+
+<Fragment set:html={html} />

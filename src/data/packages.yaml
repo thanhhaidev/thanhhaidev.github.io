@@ -1,0 +1,43 @@
+# Packages on pub.dev. The id must be the exact pub.dev package name.
+# Version, likes, pub points and downloads are fetched from pub.dev at build time.
+
+- id: prebid_mobile_sdk
+  order: 1
+  description: Core plugin — rendered ads and the Original API keyword handoff.
+  repo: thanhhaidev/prebid-mobile-flutter
+
+- id: prebid_mobile_sdk_gam
+  order: 2
+  description: Google Ad Manager rendering via Prebid event handlers.
+  repo: thanhhaidev/prebid-mobile-flutter
+
+- id: prebid_mobile_sdk_admob
+  order: 3
+  description: AdMob mediation via Prebid adapters.
+  repo: thanhhaidev/prebid-mobile-flutter
+
+- id: prebid_mobile_sdk_max
+  order: 4
+  description: AppLovin MAX mediation via Prebid adapters.
+  repo: thanhhaidev/prebid-mobile-flutter
+
+- id: icomoon_generator
+  order: 5
+  description: Generates a Flutter class of `static const IconData` fields from an IcoMoon selection — type-safe custom icon fonts.
+  repo: thanhhaidev/icomoon_generator
+
+- id: icomoon_download
+  order: 6
+  description: API and CLI that pulls icon fonts straight from icomoon.io and generates the Dart file to use them in Flutter.
+  repo: thanhhaidev/icomoon_download
+
+- id: flutter_date_formatter
+  order: 7
+  description: Locale-aware date and time formatting for Dart & Flutter — relative dates, ordinal numbers and more.
+  repo: thanhhaidev/flutter_date_formatter
+  docs: https://thanhhaidev.github.io/flutter_date_formatter/
+
+- id: easy_localization_cleaner
+  order: 8
+  description: CLI that finds and removes unused keys from the JSON translation files used by `easy_localization`.
+  repo: thanhhaidev/easy_localization_cleaner
